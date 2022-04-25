@@ -10,7 +10,7 @@ import { populateProfile } from "./store/actions/users";
 import { useDispatch, useSelector } from "react-redux";
 import MemberRoute from "./routes/MemberRoute";
 import GuestRoute from "./routes/GuestRoute";
-
+import Cookie from 'js-cookie'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import routes from "./routers";
@@ -21,25 +21,35 @@ function App() {
 
    useEffect(() => {
      let session = null;
-     if (localStorage.getItem("token")) {
+     let sessionCookie = Cookie.get("token");
+
+     if (sessionCookie) {
        session = localStorage.getItem("token");
+       if (!session) {
+         localStorage.setItem('token',sessionCookie)
+       } else {
+         if (session !== sessionCookie) {
+              localStorage.setItem("token", sessionCookie);
+
+         }
+       }
        const loadUser = async () => {
-            await auth
-              .details(`Bearer ${session}`)
-              .then((details) => {
-                dispatch(populateProfile(details.data.data.data));
-              })
-              .catch((err) => {
-                auth.refresh(session).then((res) => {
-                  const newToken = res.data.data.access_token;
-                  localStorage.setItem("token", newToken);
-                  auth.details(`Bearer ${newToken}`).then((details) => {
-                    dispatch(populateProfile(details.data.data.data));
-                  });
-                });
-              });
-        }
-     loadUser()
+         await auth
+           .details(`Bearer ${sessionCookie}`)
+           .then((details) => {
+             dispatch(populateProfile(details.data.data.data));
+           })
+           .catch((err) => {
+             auth.refresh(session).then((res) => {
+               const newToken = res.data.data.access_token;
+               localStorage.setItem("token", newToken);
+               auth.details(`Bearer ${newToken}`).then((details) => {
+                 dispatch(populateProfile(details.data.data.data));
+               });
+             });
+           });
+       };
+       loadUser();
      }
 
    }, [dispatch]);

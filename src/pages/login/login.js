@@ -4,7 +4,8 @@ import setAuthorizationHeader from '../../config/axios/setAuthorizationHeader';
 import useForm from '../../helpers/hook/useForm';
 import { useDispatch } from "react-redux";
 import { populateProfile } from '../../store/actions/users';
-import { Router,useNavigate } from "react-router-dom";
+import { Router, useNavigate } from "react-router-dom";
+import Cookie from 'js-cookie'
 import axios from 'axios';
   import { toast } from "react-toastify";
 function Login({history}) {
@@ -22,7 +23,7 @@ function Login({history}) {
         .login({ email, password })
           .then(async (res) => {
             localStorage.setItem("token", res.data.data.access_token);
-                console.log(res.data.data.access_token);
+            Cookie.set("token", res.data.data.access_token);
               await auth.details(`Bearer ${res.data.data.access_token}`).then((detail) => {
 
                   

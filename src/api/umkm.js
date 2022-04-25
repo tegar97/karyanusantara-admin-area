@@ -1,34 +1,38 @@
 import callApi from "../config/axios";
 
-export async function updateStore(data, token) {
-  const url = `/auth/umkm/storeEdit`;
+export async function getUmkm( token) {
+  const url = `/getUmkm`;
 
   return callApi({
     url,
-      method: "POST",
-    data,
+      method: "GET",
     headers: token,
   });
 }
 
 
-export async function uploadAvatar(data, token) {
-  const url = `/auth/umkm/avatarUpdate`;
+export async function DetailUmkm( id,token) {
+  const url = `/getUmkm/${id}`;
 
   return callApi({
     url,
-    method: "POST",
-    data,
+      method: "GET",
     headers: token,
   });
 }
-export async function businessSetting(data, token) {
-  const url = `/auth/umkm/businessSetting`;
+
+
+export async function UmkmTransaction(id, token, status) {
+  const url = `/getUmkmTransaction/${id}/${status}`;
 
   return callApi({
     url,
-    method: "POST",
-    data,
+    method: "GET",
+
     headers: token,
   });
 }
+
+
+
+

@@ -5,12 +5,18 @@ import './../../../sidebar.css';
 import { useSelector } from 'react-redux';
 import { baseUrl } from '../../../constant/baseUrl';
 import { useLocation } from 'react-router-dom';
-
+import Cookie from 'js-cookie'
 function SideBar() {
   const location = useLocation();
   const [expanded, setExpanded] = useState(false);
   const [expandedSetting, setExpandedSetting] = useState(false);
-      const users = useSelector((state) => state.users);
+  const users = useSelector((state) => state.users);
+  
+  const logout = () => {
+    localStorage.removeItem('token')
+    Cookie.remove("token");
+    window.location.reload();
+  }
 
     return (
       <section className="sidebar">
@@ -119,9 +125,7 @@ function SideBar() {
                   />
                 </svg>
                 <p className="item-title ml-2 cursor-pointer">
-                  <span className="text-lg text-decoration-none">
-                    Product
-                  </span>
+                  <span className="text-lg text-decoration-none">Product</span>
                 </p>
               </div>
             </Link>
@@ -163,9 +167,7 @@ function SideBar() {
               </svg>
               <Link to="/umkm">
                 <p className="item-title ml-2">
-                  <span className="text-lg text-decoration-none">
-                    Umkm 
-                  </span>
+                  <span className="text-lg text-decoration-none">Umkm</span>
                 </p>
               </Link>
             </div>
@@ -245,10 +247,10 @@ function SideBar() {
                   stroke-linejoin="round"
                 />
               </svg>
-              <p className="item-title ml-2">
-                <a href="" className="text-lg text-decoration-none">
+              <p className="item-title ml-2 cursor-pointer">
+                <span onClick={logout} href="" className="text-lg text-decoration-none">
                   Log Out
-                </a>
+                </span>
               </p>
             </div>
           </div>
