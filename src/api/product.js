@@ -20,7 +20,7 @@ export async function getMyProduct(page,token) {
   });
 }
 export async function getUnderReviewProduct(page,token) {
-  const url = `/umkm/underreview?${page}`;
+  const url = `/umkm/underreview?page=${page}`;
 
   return callApi({
     url,

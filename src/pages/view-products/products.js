@@ -9,6 +9,8 @@ function Products() {
   const [currentPage, setCurrentPage] = useState('');
  
     useEffect( () => {
+
+      console.log(currentPage)
       const token = localStorage.getItem("token");
 
       const load = async () => {
@@ -20,11 +22,14 @@ function Products() {
           setProducts(response.data);
         }
 
+        console.log(response)
       }
       load()
     }, [currentPage]);
   
-  
+  const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber.selected + 1);
+  };
 
   return (
     <main className="flex-grow wrapper min-h-screen py-12 px-12 ml-5">
@@ -63,7 +68,6 @@ function Products() {
               <div className="w-1/5">
                 <span className="text-gray-700 text-md font-bold ">Stock</span>
               </div>
-             
             </div>
             <div className="header flex flex-col w-full  px-2  border-gray-200 border-t ">
               {products?.data?.map((data) => {
@@ -73,15 +77,9 @@ function Products() {
             <div className="justify-end flex flex-row  mt-5 ">
               {products.total > 10 && (
                 <ReactPaginate
-                  className="flex flex-row w-1/3 justify-around"
+                  className="flex flex-row w-1/3 justify-around "
                   pageCount={products.last_page}
-                  onPageChange={() =>
-                    setCurrentPage(
-                      products.next_page_url
-                        ? products.next_page_url.split("?")[1]
-                        : products.prev_page_url.split("?"[1])
-                    )
-                  }
+                  onPageChange={handlePageChange}
                   pageRangeDisplayed={products.per_page}
                 />
               )}

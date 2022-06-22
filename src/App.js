@@ -18,20 +18,30 @@ function App() {
   const route = useLocation()
     const dispatch = useDispatch();
   const usersToken = localStorage.getItem("token");
+     let sessionCookie = Cookie.get("token");
 
    useEffect(() => {
      let session = null;
-     let sessionCookie = Cookie.get("token");
+
+     console.log(sessionCookie)
 
      if (sessionCookie) {
+      
        session = localStorage.getItem("token");
        if (!session) {
-         localStorage.setItem('token',sessionCookie)
+         localStorage.setItem('token', sessionCookie)
        } else {
          if (session !== sessionCookie) {
-              localStorage.setItem("token", sessionCookie);
+           localStorage.setItem("token", sessionCookie);
 
          }
+       }
+
+       if (sessionCookie === undefined || sessionCookie === null) {
+      
+         localStorage.removeItem('token');
+
+     
        }
        const loadUser = async () => {
          await auth
@@ -54,7 +64,7 @@ function App() {
 
    }, [dispatch]);
   
-    const routing = useRoutes(routes(usersToken));
+    const routing = useRoutes(routes(sessionCookie));
   return (
     <div className="relative ">
       <ToastContainer />
